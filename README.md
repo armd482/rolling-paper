@@ -24,7 +24,7 @@
 
 
 ## ✨ 배포 주소
-> https://rolling-paper-4-11.netlify.app/
+> https://rolling-paper-armd482.netlify.app/
 <br />
 <br />
 
