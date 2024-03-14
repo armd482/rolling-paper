@@ -147,7 +147,6 @@ export const getImgUrl = async (file) => {
     const response = await imgurInstance.post('', formData);
     return response.data.data.link;
   } catch (error) {
-    console.log(error);
     return { error: error };
   }
 };
