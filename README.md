@@ -86,7 +86,7 @@
 </p>
 <br />
 
-> 더이상 불러올 데이터가 없으면 토스트를 띄우고 최상단으로 올라가요 !
+> 더이상 불러올 데이터가 없으면 토스트를 띄웁니다!
 <p align="start">
   <img width=550px src="https://github.com/part2-11team/rolling-paper/assets/114905530/7fa13376-fe4a-4c80-85c2-e71d171a5c28" alt="롤링 페이퍼 만들기">
 </p>
