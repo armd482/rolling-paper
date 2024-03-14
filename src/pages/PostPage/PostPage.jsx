@@ -6,7 +6,7 @@ import Header from 'components/Header/Header';
 import { PostSelectImageButton } from './components/PostImageButton/PostImageButton.js';
 import { PurpleButton } from 'components/PurpleButton/PurpleButton.jsx';
 import { TextForm } from 'components/TextForm/TextForm.jsx';
-import { getBackgroundImages, postDataToRecipient } from 'API';
+import { getBackgroundImages, postDataToRecipient } from 'API/API.js';
 import ErrorPage from 'pages/ErrorPage/ErrorPage';
 
 const PostPage = () => {

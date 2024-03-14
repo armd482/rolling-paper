@@ -1,14 +1,10 @@
-import axios from 'axios';
-import { getQueryURL } from './assets/utils/getQueryURL';
-import useRequest from './useRequest';
-
-const BASE_URL = `https://rolling-api.vercel.app`;
-
-const BASE_ID = '4-11';
-
-const IMGGUT_URL = 'https://api.imgur.com/3/image';
-
-const CLIENT_ID = '4c8db1c88e920c2';
+import { getQueryURL } from '../assets/utils/getQueryURL';
+import useRequest from '../useRequest';
+import {
+  rollingTeamInstance,
+  rollingInstance,
+  imgurInstance,
+} from './APIInstance';
 
 export const getMessageCardData = async (
   userID,
@@ -17,8 +13,8 @@ export const getMessageCardData = async (
 ) => {
   const queryURL = getQueryURL(limit, offset);
   try {
-    const response = await axios.get(
-      `${BASE_URL}/${BASE_ID}/recipients/${userID}/messages/${queryURL}`,
+    const response = await rollingTeamInstance.get(
+      `/recipients/${userID}/messages/${queryURL}`,
     );
     const data = response.data.results;
     const count = response.data.count;
@@ -30,17 +26,16 @@ export const getMessageCardData = async (
 
 export const deleteMessageCardData = async (CardID) => {
   try {
-    await axios.delete(`${BASE_URL}/${BASE_ID}/messages/${CardID}/`);
+    await rollingTeamInstance.delete(`/messages/${CardID}/`);
     return { error: null };
   } catch (error) {
     return { error: error };
   }
 };
+
 export const getRecipientData = async (userID) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/${BASE_ID}/recipients/${userID}/`,
-    );
+    const { data } = await rollingTeamInstance.get(`/recipients/${userID}/`);
     const {
       name,
       backgroundColor,
@@ -49,7 +44,7 @@ export const getRecipientData = async (userID) => {
       recentMessages,
       reactionCount,
       topReactions,
-    } = response.data;
+    } = data;
     return {
       name,
       backgroundColor,
@@ -67,7 +62,7 @@ export const getRecipientData = async (userID) => {
 
 export const deleteRecipient = async (userID) => {
   try {
-    await axios.delete(`${BASE_URL}/${BASE_ID}/recipients/${userID}/`);
+    await rollingTeamInstance.delete(`/recipients/${userID}/`);
     return { error: null };
   } catch (error) {
     return { error: error };
@@ -114,8 +109,8 @@ export default getRecipientsData;
 // --- subheader
 export const getEmojiData = async (userID) => {
   try {
-    const response = await axios.get(
-      `${BASE_URL}/${BASE_ID}/recipients/${userID}/reactions/`,
+    const response = await rollingTeamInstance.get(
+      `/recipients/${userID}/reactions/`,
     );
     const { results } = response.data;
 
@@ -134,8 +129,8 @@ export const postEmoji = async (userID, emoji) => {
       emoji: emoji,
       type: 'increase',
     };
-    const response = await axios.post(
-      `${BASE_URL}/${BASE_ID}/recipients/${userID}/reactions/`,
+    const response = await rollingTeamInstance.post(
+      `/recipients/${userID}/reactions/`,
       data,
     );
     return response;
@@ -149,19 +144,16 @@ export const getImgUrl = async (file) => {
   try {
     const formData = new FormData();
     formData.append('image', file);
-    const response = await axios.post(IMGGUT_URL, formData, {
-      headers: {
-        Authorization: `Client-ID ${CLIENT_ID}`,
-      },
-    });
+    const response = await imgurInstance.post('', formData);
     return response.data.data.link;
   } catch (error) {
+    console.log(error);
     return { error: error };
   }
 };
 export const getProfileImages = async () => {
   try {
-    const response = await axios.get(`${BASE_URL}/profile-images/`);
+    const response = await rollingInstance.get(`/profile-images/`);
     return response.data.imageUrls;
   } catch (error) {
     return { error: error };
@@ -169,10 +161,12 @@ export const getProfileImages = async () => {
 };
 
 export const postMessage = async (data) => {
-  const url = `${BASE_URL}/${BASE_ID}/recipients/${data.recipientId}/messages/`;
   try {
-    const response = await axios.post(url, data);
-    return response.ok ? true : 'Error: Message not sent';
+    await rollingTeamInstance.post(
+      `/recipients/${data.recipientId}/messages/`,
+      data,
+    );
+    return true;
   } catch (error) {
     return { error: error };
   }
@@ -182,9 +176,7 @@ export const postMessage = async (data) => {
 
 export const getBackgroundImages = async () => {
   try {
-    const response = await axios.get(
-      'https://rolling-api.vercel.app/background-images/',
-    );
+    const response = await rollingInstance.get('/background-images/');
     const src = response.data.imageUrls;
     return { src, error: null };
   } catch (error) {
@@ -193,11 +185,8 @@ export const getBackgroundImages = async () => {
 };
 
 export const postDataToRecipient = async (postData) => {
-  const BASE_URL = 'https://rolling-api.vercel.app';
-  const BASE_ID = '4-11';
-  const url = `${BASE_URL}/${BASE_ID}/recipients/`;
   try {
-    const response = await axios.post(url, postData);
+    const response = await rollingTeamInstance.post(`/recipients/`, postData);
     const idData = response.data.id;
     return { idData, error: null };
   } catch (error) {

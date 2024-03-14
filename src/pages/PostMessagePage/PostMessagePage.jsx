@@ -16,7 +16,7 @@ import sampleImg8 from 'assets/images-message/8.jpg';
 import sampleImg9 from 'assets/images-message/9.jpg';
 import sampleImg10 from 'assets/images-message/10.jpg';
 import { TextForm } from 'components/TextForm/TextForm.jsx';
-import { getImgUrl, getProfileImages, postMessage } from 'API.js';
+import { getImgUrl, getProfileImages, postMessage } from 'API/API.js';
 import Dropdown from './components/Dropdown/Dropdown.jsx';
 
 export const PostMessagePage = () => {

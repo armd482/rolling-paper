@@ -6,7 +6,7 @@ import {
   getMessageCardData,
   deleteMessageCardData,
   deleteRecipient,
-} from 'API';
+} from 'API/API';
 import loadingIcon from 'assets/icon/loading.svg';
 import { MessageCard } from '../MessageCard/MessageCard';
 import { Toast } from '../Toast/Toast';
@@ -40,9 +40,7 @@ export const MessageCardWrapper = ({
   const navigate = useNavigate();
 
   const debounce = (func, time) => {
-    if (debounceID.current) {
-      clearTimeout(debounceID.current);
-    }
+    if (debounceID.current);
     debounceID.current = setTimeout(() => {
       func();
       debounceID.current = null;

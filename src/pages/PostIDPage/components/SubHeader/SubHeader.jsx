@@ -4,7 +4,7 @@ import AllEmoji from 'assets/icon/arrow_down.svg';
 import ALLEmojiUp from 'assets/icon/arrow_top.png';
 import AddEmoji from 'assets/icon/add-24.svg';
 import Share from 'assets/icon/share-24.svg';
-import { getEmojiData, postEmoji } from 'API';
+import { getEmojiData, postEmoji } from 'API/API';
 import PaperListEmojiBadge from 'components/Badge/EmojiBadge/PaperListEmojiBadge';
 import EmojiModal from '../subHeaderModal/showImgModal/EmojiModal';
 import EmojiPicker from 'emoji-picker-react';

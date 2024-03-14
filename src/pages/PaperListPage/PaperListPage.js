@@ -7,7 +7,7 @@ import ArrowButton from './components/ArrowButton/ArrowButton';
 import PaperListSkeleton from './components/Skeleton/PaperListSkeleton';
 import Header from 'components/Header/Header';
 import { PurpleButton } from 'components/PurpleButton/PurpleButton';
-import getRecipientData from 'API';
+import getRecipientData from 'API/API';
 import ErrorPage from 'pages/ErrorPage/ErrorPage';
 
 const PaperListPage = () => {

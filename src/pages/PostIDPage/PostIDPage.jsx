@@ -9,7 +9,7 @@ import Header from 'components/Header/Header';
 import SubHeader from './components/SubHeader/SubHeader';
 import { PostIDContext } from 'context/PostIDContext';
 import { setScrollBarHeightPosition } from 'assets/utils/setScrollBarHeightPosition';
-import { getRecipientData } from 'API';
+import { getRecipientData } from 'API/API';
 import arrow_up from 'assets/icon/arrow_up.svg';
 import ErrorPage from 'pages/ErrorPage/ErrorPage';
 
