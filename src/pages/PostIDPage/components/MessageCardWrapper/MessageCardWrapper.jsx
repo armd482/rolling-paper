@@ -40,7 +40,9 @@ export const MessageCardWrapper = ({
   const navigate = useNavigate();
 
   const debounce = (func, time) => {
-    if (debounceID.current) return;
+    if (debounceID.current) {
+      clearTimeout(debounceID.current);
+    }
     debounceID.current = setTimeout(() => {
       func();
       debounceID.current = null;
