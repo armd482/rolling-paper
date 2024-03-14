@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import MainPage from './pages/MainPage';
 import PostMessagePage from './pages/PostMessagePage/PostMessagePage';
 import GlobalStyle from './style/GlobalStyle';
@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <BrowserRouter>
+      <HashRouter>
         <GlobalStyle />
         <Routes>
           <Route path="/" element={<MainPage />}></Route>
@@ -25,7 +25,7 @@ function App() {
           </Route>
           <Route path="/*" element={<ErrorPage />}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </>
   );
 }
