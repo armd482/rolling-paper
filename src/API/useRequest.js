@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import fetch from './fetch';
+import { rollingTeamInstance } from 'API/APIInstance';
 
 function useRequest({ deps = [], skip = false, options }) {
   const [data, setData] = useState(null);
@@ -13,7 +13,7 @@ function useRequest({ deps = [], skip = false, options }) {
       setError(null);
 
       try {
-        const { data: fetchedData, status } = await fetch({
+        const { data: fetchedData, status } = await rollingTeamInstance({
           ...options,
           ...args,
         });

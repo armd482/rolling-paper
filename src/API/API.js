@@ -1,5 +1,5 @@
 import { getQueryURL } from '../assets/utils/getQueryURL';
-import useRequest from '../useRequest';
+import useRequest from './useRequest';
 import {
   rollingTeamInstance,
   rollingInstance,

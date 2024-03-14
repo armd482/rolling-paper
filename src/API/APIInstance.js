@@ -5,14 +5,19 @@ const BASE_TEAM_ID = '4-11';
 const IMGGUT_URL = 'https://api.imgur.com/3/image';
 const CLIENT_ID = '4c8db1c88e920c2';
 
-const rollingBaseAxiosAPI = () => {
-  const instance = axios.create({ baseURL: BASE_URL });
+const rollingBaseAxiosAPI = (options) => {
+  const instance = axios.create({
+    baseURL: BASE_URL,
+    timeout: 10000,
+    ...options,
+  });
   return instance;
 };
 
 const rollingTeamBaseAxiosAPI = (options) => {
   const instance = axios.create({
     baseURL: `${BASE_URL}/${BASE_TEAM_ID}`,
+    timeout: 10000,
     ...options,
   });
   return instance;
