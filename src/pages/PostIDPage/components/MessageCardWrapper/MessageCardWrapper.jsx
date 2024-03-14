@@ -40,7 +40,9 @@ export const MessageCardWrapper = ({
   const navigate = useNavigate();
 
   const debounce = (func, time) => {
-    if (debounceID.current);
+    if (debounceID.current) {
+      clearTimeout(debounceID.current);
+    }
     debounceID.current = setTimeout(() => {
       func();
       debounceID.current = null;
@@ -175,7 +177,7 @@ export const MessageCardWrapper = ({
         </PurpleButton>
       </S.ButtonWrapper>
       <S.GridWrapper ref={gridWrapperRef}>
-        <AddMessageCard />
+        {!(loading.type === 'initial' && loading.status) && <AddMessageCard />}
         {messageCardData.map((cardData, index) => (
           <MessageCard
             cardData={cardData}
