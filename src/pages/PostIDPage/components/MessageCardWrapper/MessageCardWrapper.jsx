@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import * as S from './MessageCardWrapper.style';
 import { AddMessageCard } from '../AddMessageCard/AddMessageCard';
@@ -13,9 +13,6 @@ import { Toast } from '../Toast/Toast';
 import { PurpleButton } from 'components/PurpleButton/PurpleButton';
 const PAGE_LOADING = 12;
 const INITIAL_PAGE_LOADING = 11;
-const options = {
-  threshold: 0.5,
-};
 
 export const MessageCardWrapper = ({
   userData,
@@ -29,9 +26,8 @@ export const MessageCardWrapper = ({
 }) => {
   const { userID } = useParams();
   const gridWrapperRef = useRef(null);
-  const target = useRef(null);
   const deleteCount = useRef(0);
-  const debounceID = useRef(null);
+  const throttlingID = useRef(null);
   const [toastStatus, setToastStatus] = useState({
     visible: false,
     update: false,
@@ -39,13 +35,12 @@ export const MessageCardWrapper = ({
   const [loading, setLoading] = useState({ type: 'initial', status: true });
   const navigate = useNavigate();
 
-  const debounce = (func, time) => {
-    if (debounceID.current) {
-      clearTimeout(debounceID.current);
-    }
-    debounceID.current = setTimeout(() => {
+  const throttling = (func, time) => {
+    if (throttlingID.current) return;
+    throttlingID.current = setTimeout(() => {
+      console.log('update');
       func();
-      debounceID.current = null;
+      throttlingID.current = null;
     }, time);
   };
 
@@ -55,12 +50,7 @@ export const MessageCardWrapper = ({
   const handleToastUpdate = (value) => {
     setToastStatus((prev) => ({ ...prev, update: value }));
   };
-  //페이지 마지막 부분에 도착했을 때 처리할 콜백 함수 -> loading 값을 업데이트하여 데이터를 load.
-  const handleIntersectionObserver = (entry) => {
-    if (entry[0].isIntersecting && !loading.status) {
-      setLoading((prevLoad) => ({ ...prevLoad, status: true }));
-    }
-  };
+
   //현재 userID의 Recipient 데이터를 삭제하는 함수 -> 삭제 버튼을 눌렀을 때 동작.
   const deleteRecipientData = async () => {
     const { error } = await deleteRecipient(userID);
@@ -144,30 +134,27 @@ export const MessageCardWrapper = ({
       if (loading.type === 'initial') {
         initialGetCardData(INITIAL_PAGE_LOADING, messageCardData.length);
       } else {
-        debounce(
-          () =>
-            getCardData(
-              PAGE_LOADING + deleteCount.current,
-              messageCardData.length,
-            ),
-          200,
-        );
+        getCardData(PAGE_LOADING + deleteCount.current, messageCardData.length);
       }
     }
   };
-  //intersectionObserver 등록 -> 페이지가 마지막 부분(target)에 닿았는지를 확인
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      handleIntersectionObserver,
-      options,
-    );
-    if (target.current) {
-      observer.observe(target.current);
-    }
-    return () => {
-      observer.disconnect(target.current);
+    const handleScroll = () => {
+      const scrollTop = pageRef.current.scrollTop;
+      const viewHeight = window.innerHeight;
+      const scrollHeight = pageRef.current.scrollHeight;
+      if (scrollHeight - (scrollTop + viewHeight) < 50) {
+        throttling(
+          () => setLoading((prev) => ({ ...prev, status: true })),
+          300,
+        );
+      }
     };
-  }, [handleIntersectionObserver]);
+    pageRef.current.addEventListener('scroll', handleScroll);
+    return () => {
+      pageRef.current.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   return (
     <S.Wrpaper>
@@ -187,15 +174,13 @@ export const MessageCardWrapper = ({
           />
         ))}
       </S.GridWrapper>
-      {loading.status ? (
+      {loading.status && (
         <S.LoadingIcon
           src={loadingIcon}
           alt="loading"
           $loadingType={loading.type}
           onLoad={dataLoad}
         />
-      ) : (
-        <S.intersectionBar ref={target}></S.intersectionBar>
       )}
       <Toast
         type="load"
